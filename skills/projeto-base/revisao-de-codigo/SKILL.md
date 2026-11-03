@@ -10,7 +10,7 @@ Two-axis review of the diff between `HEAD` and a fixed point the user supplies:
 
 Both axes run as **parallel sub-agents** so they don't pollute each other's context, then this skill aggregates their findings. Start every sub-agent with a fresh context window.
 
-> **Adaptação local (workflow padrão):** copiada de `mattpocock/skills` (`skills/engineering/code-review`, MIT; ver `LICENSE`). Mudanças: nome `revisao-de-codigo` (evita colidir com o `/code-review` do Claude Code) e esta nota no lugar da linha sobre o rastreador de issues. Neste fluxo a spec vem de `planos/<tarefa>.md`, depois `BRIEFING.md` e `DECISOES.md`. Quem implementou a mudança não roda esta skill sobre ela: rode-a no agente `revisor` (contexto limpo) ou em outra IA — ver `docs/AGENTE-REVISOR.md` do kit.
+> **Adaptação local (workflow padrão):** copiada de `mattpocock/skills` (`skills/engineering/code-review`, MIT; ver `LICENSE`). Mudanças: nome `revisao-de-codigo` (evita colidir com o `/code-review` do Claude Code) e esta nota no lugar da linha sobre o rastreador de issues. Neste fluxo a spec vem de `planos/<tarefa>.md`, depois `BRIEFING.md` e `DECISOES.md`. Quem implementou a mudança não roda esta skill sobre ela: rode-a no agente `revisor` (contexto limpo) ou em outra IA — ver `docs/08-agente-revisor.md` do kit.
 
 ## Process
 
