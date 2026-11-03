@@ -24,9 +24,9 @@ Os papéis ficam em `papeis` no `workflow.config.json` ([configuração](CONFIGU
 | Buscar, varrer, conferir | subagente barato (ex.: **Haiku**) | Agent com `model: haiku` | o mais barato que resolve |
 | Decisão difícil, conflito, erro sem pista | modelo mais forte (ex.: **Opus**) | — | só julgamento, nunca volume |
 
-Se você inverter (Claude implementa), o revisor passa a ser outro que não o Claude daquela mudança: outro fornecedor (Gemini, GPT) ou, no mínimo, outro modelo.
+Se você inverter (Claude implementa), o revisor recomendado passa a ser outra IA (Codex, Gemini, GPT). Uma IA só também funciona: o agente `revisor` da mesma IA, em contexto limpo. Os três caminhos: [AGENTE-REVISOR.md](AGENTE-REVISOR.md).
 
-**Quem faz não revisa.** Revisor recebe só o diff e sempre tem a saída honesta "sem achados". Achado é conferido na linha antes de ser aceito. Revisor fora do ar → outro dos `revisores` (ou qualquer modelo que não implementou); diga qual revisou; revisão nunca é pulada.
+**Quem faz não revisa** o próprio trabalho na mesma conversa (outra IA é o recomendado; mesma IA em contexto limpo vale). Revisor recebe só o diff e sempre tem a saída honesta "sem achados". Achado é conferido na linha antes de ser aceito. Revisor fora do ar → outro dos `revisores` (ou qualquer modelo que não implementou); diga qual revisou; revisão nunca é pulada.
 
 ## Briefing
 Tarefa, caminhos, o que não tocar, critério de pronto, formato da resposta e o bloco ECONOMIA ([modelo](../projeto/modelos/docs/BRIEF-PADRAO-SUBAGENTE.md)). Nunca histórico de conversa, transcrição ou log inteiro. Tarefa nova = agente novo.

@@ -9,7 +9,7 @@ const REGRAS = [
   [/\b(bug|erro|traceback|stack ?trace|regress[aã]o|quebr(ou|ado|ada)|n[aã]o funciona)/, 'bug: `superpowers:systematic-debugging` antes de propor fix.'],
   [/\b(nova (feature|funcionalidade)|brainstorm|vamos (criar|montar|construir))\b/, 'feature: `superpowers:brainstorming` e plano em planos/ antes de codar.'],
   [/\b(teste|tdd)s?\b/, 'testes: `superpowers:test-driven-development` (teste novo nasce provado).'],
-  [/\b(revis(a|ar|e|ão|ao)|review|olha esse diff)\b/, 'revisão: outro modelo, só o diff, com saída "sem achados".'],
+  [/\b(revis(a|ar|e|ão|ao)|review|olha esse diff)\b/, 'revisão: outra IA (recomendado) ou agente `revisor` em contexto limpo (skill `revisao-de-codigo`); só o diff; "sem achados" vale.'],
   [/\b(landing|tela|layout|dashboard|tipografia|paleta|figma|ui|ux)\b/, 'UI: `impeccable` + `ui-ux-pro-max`.'],
   [/\b(seguran[çc]a|segredo|api key|token|lgpd|senha)\b/, 'segurança: regra literal; `security-review`.'],
   [/\b(onde fica|como funciona|quem chama|arquitetura)\b/, 'código: `graphify query "<pergunta>"` antes de abrir arquivos.'],

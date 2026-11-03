@@ -38,8 +38,8 @@ try {
     if (p) {
       const nome = (x) => (x && (x.ferramenta || x)) || 'a definir';
       const rev = (p.revisores || []).map(nome);
-      avisos.push(`PAPÉIS (workflow.config.json): coordena ${nome(p.coordenador)} · implementa ${nome(p.implementador)} · revisa ${rev.join(' ou ') || 'a definir'}. Quem implementou não revisa.`);
-      if (rev.includes(nome(p.implementador))) avisos.push(`0-C. ${nome(p.implementador)} está como implementador E revisor: a revisão de uma mudança tem de vir de outro.`);
+      avisos.push(`PAPÉIS (workflow.config.json): coordena ${nome(p.coordenador)} · implementa ${nome(p.implementador)} · revisa ${rev.join(' ou ') || 'a definir'}. Quem construiu não revisa o próprio trabalho na mesma conversa.`);
+      if (rev.includes(nome(p.implementador))) avisos.push(`0-C. ${nome(p.implementador)} implementa e revisa: vale só em contexto limpo (agente revisor ou API, sem o histórico de quem implementou); outra IA é o recomendado.`);
     }
   } catch { /* sem config ou sem papéis: segue */ }
 

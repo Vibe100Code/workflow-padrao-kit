@@ -41,8 +41,8 @@ node scripts/rodar-gates.mjs
 ```
 Roda todos os gates do `workflow.config.json` em paralelo e reprova no fim, com a lista inteira de falhas. **Teste novo nasce provado:** injete o defeito real, confirme que o teste acusa, desfaça. Vermelho é dado: defeito no código, pré-condição faltando ou outra sessão mexendo no mesmo lugar — três causas, três ações diferentes.
 
-## 6. Revisão por outro modelo
-Um dos `revisores` de `papeis` que **não** implementou esta mudança. Com o padrão sugerido (API Claude):
+## 6. Revisão independente
+Um dos `revisores` de `papeis`, nunca a conversa que implementou. Outra IA é o recomendado; o agente `revisor` da mesma IA em contexto limpo também vale ([3 caminhos](AGENTE-REVISOR.md)). Com o padrão sugerido (API Claude):
 ```bash
 node scripts/revisar-pela-api.mjs --base main -o revisao.md            # Sonnet
 node scripts/revisar-pela-api.mjs --base main --modelo claude-opus-5-5 -o revisao.md   # dinheiro, segurança, motor

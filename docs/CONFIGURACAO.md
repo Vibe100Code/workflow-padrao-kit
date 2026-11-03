@@ -37,10 +37,10 @@ Cada papel aceita qualquer ferramenta. Exemplos:
 |---|---|---|---|
 | padrão sugerido | Claude Code | Codex | API Claude |
 | o contrário | Codex | Claude Code (`claude -p`) | outro modelo (ex.: API Claude com outro modelo, Gemini, GPT) |
-| uma ferramenta só | Claude Code | Claude Code | outro modelo ou outro fornecedor |
+| uma ferramenta só | Claude Code | Claude Code | agente `revisor` (mesma IA, contexto limpo) |
 | com segundo revisor por API | Claude Code | Codex | API Claude, Gemini API ([conectar](CONECTAR-APIS.md)) |
 
-O hook de início mostra os papéis em toda sessão e avisa quando o implementador também está entre os revisores: **quem implementou uma mudança não revisa essa mudança**, a única parte fixa. `cmd` é opcional e serve de lembrete do comando; nenhum script do kit chama a ferramenta pelo nome.
+O hook de início mostra os papéis em toda sessão e lembra, quando o implementador também está entre os revisores, que a revisão precisa ser em contexto limpo: **quem construiu não revisa o próprio trabalho na mesma conversa** é a única parte fixa ([agente revisor](AGENTE-REVISOR.md)). `cmd` é opcional e serve de lembrete do comando; nenhum script do kit chama a ferramenta pelo nome.
 
 **Gate novo nasce provado:** antes de entrar na lista, injete o defeito que ele deve pegar e confirme que ele reprova.
 

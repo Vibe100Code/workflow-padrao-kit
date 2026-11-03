@@ -9,7 +9,7 @@
 | Segundo revisor | a API do Gemini ou da OpenAI dá um segundo parecer sobre o mesmo diff |
 | Ajudante por script | um script lê um trecho e devolve um resumo, sem abrir sessão |
 
-Quem implementou uma mudança não revisa essa mudança. Se o Claude implementa, o revisor pela API é outro fornecedor (OpenAI ou Gemini) ou, no mínimo, outro modelo.
+Quem construiu não revisa o próprio trabalho na mesma conversa. Uma chamada à API já é contexto limpo, então o mesmo modelo pode revisar ([caminho c](AGENTE-REVISOR.md)); outro fornecedor é o recomendado.
 
 ## 1. Guardar a chave fora do git
 Chave nunca entra em commit, briefing, log ou prompt.

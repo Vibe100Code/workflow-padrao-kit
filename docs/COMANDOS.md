@@ -79,6 +79,6 @@ A chave vem **só** do Keychain (`security find-generic-password -a "$USER" -s a
 |---|---|
 | `maquina/instalar-maquina.sh [--aplicar] [--sem-plugins] [--sem-rede]` | prepara a máquina |
 | `projeto/instalar.sh <repo> [--nome X] [--skills base,ui,spec,pesquisa\|todas]` | instala num projeto |
-| `projeto/testes/testar-kit.sh` | instalação + hooks (32 checagens) |
+| `projeto/testes/testar-kit.sh` | instalação + hooks (33 checagens) |
 | `projeto/testes/testar-fluxo.sh` | sessão → tarefa → gates → integrar → limpeza (17) |
 | `projeto/testes/testar-revisor.sh` | revisor pela API sem rede (4) |

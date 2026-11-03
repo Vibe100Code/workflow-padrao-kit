@@ -13,7 +13,7 @@
 3. `learnings/` — uma nota por problema resolvido.
 4. `planos/` — plano de cada tarefa (arquivos, recursos, dependências).
 5. `graphify query "<pergunta>"` — mapa do código, antes de busca ampla.
-6. `workflow.config.json` → `papeis` — quem coordena, quem implementa e quem revisa **neste** projeto. Quem implementou uma mudança não revisa essa mudança.
+6. `workflow.config.json` → `papeis` — quem coordena, quem implementa e quem revisa **neste** projeto. Quem construiu não revisa o próprio trabalho na mesma conversa.
 
 Doc e código discordam: o código vence; siga o código e avise que o doc está velho.
 
@@ -29,7 +29,7 @@ Doc e código discordam: o código vence; siga o código e avise que o doc está
 2. Quatro perguntas por escrito: evidência, alcance, risco, como provar.
 3. Plano em `planos/` (modelo `planos/_MODELO.md`).
 4. Implementar (pelo `implementador` de `papeis`) · 5. Testes (teste novo nasce provado: injeta o defeito, ele acusa).
-6. Revisão por outro modelo (só o diff) · 7. Prova pelo caminho do usuário.
+6. Revisão independente: outra IA (recomendado) ou o agente `revisor` em contexto limpo (só o diff) · 7. Prova pelo caminho do usuário.
 8. Aprovação (tela nova: voto do dono no print) · 9. Integrar, um por vez.
 10. Nota em `learnings/` + `graphify update .`.
 

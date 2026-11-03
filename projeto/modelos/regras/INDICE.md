@@ -10,7 +10,7 @@
 - `008-ondas-paralelas-de-implementacao.md` — Despache implementadores em paralelo apenas com arquivos, recursos e dependências disjuntos, commitando pelo orquestrador.
 - `009-onda-de-investigacao-em-arquivo-unico.md` — Paralelize a investigação em leitura e serialize a escrita quando várias tarefas convergem no mesmo arquivo.
 - `010-prova-pelo-caminho-do-usuario.md` — Prove toda mudança visível pelo caminho real do usuário a frio no mesmo build de publicação.
-- `011-revisao-independente-somente-leitura.md` — Audite mudanças não triviais com revisor de outro modelo em modo somente leitura e verifique cada achado no código.
+- `011-revisao-independente-somente-leitura.md` — Audite mudanças não triviais com revisor independente (de preferência outra IA) em modo somente leitura e verifique cada achado no código.
 - `012-roteamento-de-especialistas-e-camada-de-modelo.md` — Só despache subagentes quando o ganho pagar o custo de 3 a 10x, com camada de modelo explícita e catálogo verificado em disco.
 - `013-design-system-obrigatorio-e-divida-decrescente.md` — Proíba valores visuais crus fora do tema central, congele a dívida para só encolher e exija aprovação de tela.
 

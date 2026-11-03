@@ -51,7 +51,7 @@ O kit tem **duas camadas**:
 
 1. **Dado vence opinião.** Decisão do dono escrita? Usa. Medição? Usa. Nenhuma das duas? Mede. "Não medi; medir custa X" é resposta válida; chute não é.
 2. **Escrito vence memória.** Decisão, medição e erro resolvido vão para arquivo; o que fica só no chat a próxima sessão inventa de novo.
-3. **Quem faz não revisa.** Um modelo implementa, outro (de preferência de outro fornecedor) revisa. Quais ferramentas fazem cada papel é escolha sua.
+3. **Quem faz não revisa.** Quem construiu não revisa o próprio trabalho na mesma conversa. Revisor de outra IA é o recomendado; um agente revisor da mesma IA, em contexto limpo, também vale ([agente revisor](docs/AGENTE-REVISOR.md)). Quais ferramentas fazem cada papel é escolha sua.
 4. **Mínimo de contexto.** Trecho, não arquivo. Caminho, não conteúdo. Diff, não projeto.
 5. **Pronto é com prova.** Testado pelo caminho do usuário: do zero, por todas as entradas, tela inteira conferida. Teste verde sozinho não é prova.
 6. **Regra se lê pelo porquê.** Se a letra trava um caso que o motivo não cobre, siga o motivo e diga qual regra leu assim. **Nunca flexível:** dinheiro e gasto pago, senha e segredo, apagar, publicar/integrar na principal, segurança, loja de apps, aprovação final de tela.
@@ -202,7 +202,7 @@ Regras: não pergunta o que já está escrito (procura antes e cita a fonte); se
 | 3 | **Plano** | `planos/<nome>.md` a partir de `planos/_MODELO.md` (Files / Resources / Depends-on); `superpowers:writing-plans` |
 | 4 | **Implementar** | o implementador dos `papeis` (padrão: Codex) executa o plano; a sessão confere o diff |
 | 5 | **Testes** | `node scripts/rodar-gates.mjs`; teste novo nasce provado (injeta o defeito, ele acusa) |
-| 6 | **Revisão por outro modelo** | um revisor dos `papeis` que não implementou (padrão: `node scripts/revisar-pela-api.mjs --base main -o revisao.md`); crítico/alto se conserta antes |
+| 6 | **Revisão independente** | outra IA (recomendado) ou o agente revisor da mesma IA em contexto limpo ([3 caminhos](docs/AGENTE-REVISOR.md)); crítico/alto se conserta antes |
 | 7 | **Prova pelo caminho do usuário** | abrir do zero, todas as entradas, tela inteira em tamanho real |
 | 8 | **Aprovar** | coordenador aprova pelas fontes; tela nova só com voto do dono no print ([cartão de votação](projeto/modelos/docs/CARTAO-DE-VOTACAO.md)) |
 | 9 | **Integrar pela fila** | `node scripts/integrar.mjs` → depois `node scripts/tarefa.mjs concluir` |
@@ -273,6 +273,7 @@ Toda skill de terceiros foi copiada com a licença de origem: `LICENSE` (e `NOTI
 | `projeto-spec/speckit-*`, `projeto-spec/_specify` | [github/spec-kit](https://github.com/github/spec-kit) | MIT |
 | `projeto-pesquisa/agent-reach` | [Panniantong/Agent-Reach](https://github.com/Panniantong/Agent-Reach) | MIT |
 | `projeto-pesquisa/defuddle` | [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills) | MIT |
+| `projeto-base/revisao-de-codigo` | adaptada de [mattpocock/skills · code-review](https://github.com/mattpocock/skills/tree/main/skills/engineering/code-review) (nome e nota local) | MIT |
 | `maquina/sentinela`, `projeto-base/iniciar-projeto`, `projeto-base/extract-approach`, `projeto-ui/apple-hig` | escritas para este fluxo | as do kit |
 
 Plugins (superpowers, typesafe) e ferramentas (RTK, graphify, Codex) **não** vêm copiados: o instalador só aponta para a origem.
@@ -293,13 +294,13 @@ Todos falham aberto, rodam em ~50 ms e ficam mudos quando não se aplicam. Escap
 
 ## 12. Agentes e revisão
 
-**Os papéis são seus.** Quem coordena, quem implementa e quem revisa fica em `papeis` no `workflow.config.json` (a pergunta 29 do questionário preenche); o hook de início mostra a escolha em toda sessão. Claude coordenando e Codex implementando é só o padrão sugerido. O contrário vale, uma ferramenta só vale. Fixo é uma coisa: **quem implementou uma mudança não revisa essa mudança**.
+**Os papéis são seus.** Quem coordena, quem implementa e quem revisa fica em `papeis` no `workflow.config.json` (a pergunta 29 do questionário preenche); o hook de início mostra a escolha em toda sessão. Claude coordenando e Codex implementando é só o padrão sugerido. O contrário vale, uma ferramenta só vale. Fixo é uma coisa: **quem construiu não revisa o próprio trabalho na mesma conversa**. Revisor de outra IA é o recomendado, não obrigatório: os 3 caminhos estão em [docs/AGENTE-REVISOR.md](docs/AGENTE-REVISOR.md).
 
 | Papel | Padrão sugerido | Alternativas |
 |---|---|---|
 | coordenar (orquestra, aprovação final antes de integrar) | Claude Code | Codex, ou outro agente com sessões |
 | implementar | Codex | Claude Code, agy, Gemini CLI… |
-| revisar | API Claude (Opus em dinheiro, segurança e motor) | qualquer outro modelo disponível, por app ou por API ([conectar APIs](docs/CONECTAR-APIS.md)) |
+| revisar | API Claude (Opus em dinheiro, segurança e motor) | outra IA (recomendado), ou o agente `revisor` da mesma IA em contexto limpo ([agente revisor](docs/AGENTE-REVISOR.md)) |
 | ajudar (buscar, conferir) | subagentes do Claude (Haiku) | subagentes da ferramenta escolhida |
 
 Todo relato termina com `AGENTES: <ferramenta e modelo> | <o que faz> | desde HH:MM`. Detalhe, briefing, ondas paralelas e números de economia: [docs/AGENTES-E-REVISAO.md](docs/AGENTES-E-REVISAO.md).
@@ -331,7 +332,7 @@ Não precisa de tudo no primeiro dia. Cada etapa entra quando a anterior já rod
 
 **Semana 1 — qualidade**
 - [ ] gates reais no `workflow.config.json`; teste novo nasce provado
-- [ ] revisor de outro fornecedor (chave da API no Keychain; `revisar-pela-api`)
+- [ ] revisor: outra IA (recomendado) ou o agente `revisor` da mesma IA ([agente revisor](docs/AGENTE-REVISOR.md))
 - [ ] uma nota em `learnings/` por problema resolvido (`extract-approach`)
 - [ ] subagente só com o [briefing padrão](projeto/modelos/docs/BRIEF-PADRAO-SUBAGENTE.md)
 - [ ] erro que se repetiu vira `regras/NNN-*.md` com o incidente
@@ -372,7 +373,7 @@ Mais casos: [docs/SOLUCAO-DE-PROBLEMAS.md](docs/SOLUCAO-DE-PROBLEMAS.md).
 workflow-padrao-kit/
 ├── README.md                 este arquivo
 ├── CLAUDE.md                 direção padrão para o Claude dentro do kit
-├── docs/                     FLUXO · COMANDOS · CONFIGURACAO · SKILLS · HOOKS · AGENTES-E-REVISAO · CONECTAR-APIS · SOLUCAO-DE-PROBLEMAS · ORIGEM-DAS-REGRAS
+├── docs/                     FLUXO · COMANDOS · CONFIGURACAO · SKILLS · HOOKS · AGENTES-E-REVISAO · CONECTAR-APIS · AGENTE-REVISOR · SOLUCAO-DE-PROBLEMAS · ORIGEM-DAS-REGRAS
 ├── maquina/                  camada global (uma vez por computador)
 │   ├── instalar-maquina.sh
 │   ├── CLAUDE.global.md      → ~/.claude/CLAUDE.md
@@ -382,14 +383,14 @@ workflow-padrao-kit/
 │   └── memoria/              modelos de memória
 ├── projeto/                  camada do repositório
 │   ├── instalar.sh
-│   ├── modelos/              CLAUDE.md · AGENTS.md · BRIEFING.md · DECISOES.md · workflow.config.json · regras/ · learnings/ · planos/ · docs/ · .claude/regras-de-inicio.md
+│   ├── modelos/              CLAUDE.md · AGENTS.md · BRIEFING.md · DECISOES.md · workflow.config.json · regras/ · learnings/ · planos/ · docs/ · .claude/regras-de-inicio.md · .claude/agents/revisor.md
 │   ├── hooks/                wf-inicio · wf-exige-worktree · wf-exige-grafo · wf-sugere-skill · wf-fim
 │   ├── scripts/              nova-sessao · tarefa · rodar-gates · integrar · na-fila · gates-do-que-mudou · sessoes-encerradas · revisar-pela-api
 │   ├── githooks/             commit-msg · pre-commit · pre-push · post-commit · post-checkout
 │   └── testes/               testar-kit.sh · testar-fluxo.sh · testar-revisor.sh
 └── skills/
     ├── maquina/              ponytail · caveman · impeccable · security-review · sentinela
-    ├── projeto-base/         iniciar-projeto · graphify · extract-approach · revisar-em-painel · sanear · grilling · grill-me · caveman · caveman-compress · find-skills
+    ├── projeto-base/         iniciar-projeto · graphify · extract-approach · revisao-de-codigo · revisar-em-painel · sanear · grilling · grill-me · caveman · caveman-compress · find-skills
     ├── projeto-ui/           ui-ux-pro-max · design · frontend-design-review · apple-hig
     ├── projeto-spec/         speckit-* + _specify/
     └── projeto-pesquisa/     agent-reach · defuddle

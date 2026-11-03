@@ -9,7 +9,7 @@
   "worktrees": ".claude/worktrees",
   "links": [".env", "node_modules"],
   "papeis": {
-    "_leia": "Quem faz o quê NESTE projeto. Padrão sugerido abaixo; troque à vontade (ex.: Codex coordena e Claude implementa, ou uma ferramenta só). Única regra fixa: quem implementou uma mudança não revisa essa mudança.",
+    "_leia": "Quem faz o quê NESTE projeto. Padrão sugerido abaixo; troque à vontade (ex.: Codex coordena e Claude implementa, ou uma ferramenta só). Única regra fixa: quem construiu não revisa o próprio trabalho na mesma conversa (revisor de outra IA é recomendado; o agente revisor da mesma IA em contexto limpo vale).",
     "coordenador": { "ferramenta": "Claude Code" },
     "implementador": { "ferramenta": "Codex", "cmd": "codex exec -s workspace-write -C <pasta> \"$(cat brief.md)\"" },
     "ajudantes": [

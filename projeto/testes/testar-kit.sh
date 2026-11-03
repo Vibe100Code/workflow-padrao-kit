@@ -18,6 +18,7 @@ git init -q -b main "$T"
 confere "instalador criou arquivos-base" "$(cd "$T" && ls CLAUDE.md AGENTS.md DECISOES.md regras/_MODELO.md learnings/_MODELO.md planos/_MODELO.md docs/BRIEF-PADRAO-SUBAGENTE.md docs/CARTAO-DE-VOTACAO.md docs/PASSAGEM-DE-TAREFA.md 2>&1)" '^CLAUDE.md'
 confere "BRIEFING, questionário e workflow.config criados" "$(cd "$T" && ls BRIEFING.md docs/QUESTIONARIO-INICIAL.md workflow.config.json 2>&1 | wc -l | tr -d ' ')" '^3$'
 confere "skills base instaladas (iniciar-projeto, graphify)" "$(ls "$T/.claude/skills" | tr '\n' ' ')" 'iniciar-projeto.*|graphify'
+confere "agente revisor, prompt de revisor e skill revisao-de-codigo instalados" "$(cd "$T" && ls .claude/agents/revisor.md docs/PROMPT-REVISOR.md .claude/skills/revisao-de-codigo/SKILL.md 2>&1 | wc -l | tr -d ' ')" '^3$'
 confere "githooks ligados (core.hooksPath)" "$(git -C "$T" config core.hooksPath)" '^githooks$'
 confere "scripts do fluxo copiados" "$(ls "$T/scripts" | tr '\n' ' ')" 'integrar.mjs.*nova-sessao.mjs'
 confere "settings.json liga 5 hooks" "$(grep -c 'wf-' "$T/.claude/settings.json")" '^5$'
@@ -32,7 +33,7 @@ S=$(roda wf-inicio.cjs '{"hook_event_name":"SessionStart"}'); B=$(printf %s "$S"
 confere "início avisa BRIEFING por preencher" "$S" 'iniciar-projeto'
 confere "início mostra os PAPÉIS do workflow.config.json" "$S" 'PAPÉIS.*implementa Codex'
 cp "$T/workflow.config.json" "$T/../wf.bak"; node -e 'const f=process.argv[1],c=JSON.parse(require("fs").readFileSync(f));c.papeis={coordenador:"Codex",implementador:"Claude Code",revisores:["Claude Code","Gemini"]};require("fs").writeFileSync(f,JSON.stringify(c))' "$T/workflow.config.json"
-confere "papéis invertidos valem; implementador revisor é avisado" "$(roda wf-inicio.cjs '{}')" 'coordena Codex.*0-C'
+confere "papéis invertidos valem; mesma IA revisando lembra o contexto limpo" "$(roda wf-inicio.cjs '{}')" 'coordena Codex.*0-C.*contexto limpo'
 cp "$T/../wf.bak" "$T/workflow.config.json"
 confere "início injeta regras (${B} B ≤ 2 KB)" "$S" 'REGRAS DE INÍCIO'; [ "$B" -le 2048 ] || { echo "FALHA  regras > 2 KB"; falha=$((falha+1)); }
 

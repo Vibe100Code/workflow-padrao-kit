@@ -23,7 +23,7 @@ Objetivo: dar ao Claude e aos agentes/subagentes um direcionamento completo **an
 - **Nada é inventado.** Sem resposta = `a confirmar`. Dedução sua = escreva "(dedução: <de onde>)".
 - Use as palavras do dono; não reescreva em tom de marketing.
 - Ao fim, liste em **Pendências** só os `a confirmar` que bloqueiam algo, dizendo o que bloqueiam.
-- A pergunta 29 (papéis) também se grava em `papeis` do `workflow.config.json` (`coordenador`, `implementador`, `ajudantes`, `revisores`), que é onde hooks e scripts leem. Sem resposta, deixe o padrão sugerido e marque `a confirmar` no BRIEFING. Se o implementador também estiver entre os revisores, avise: a revisão de uma mudança tem de vir de outro.
+- A pergunta 29 (papéis) também se grava em `papeis` do `workflow.config.json` (`coordenador`, `implementador`, `ajudantes`, `revisores`), que é onde hooks e scripts leem. Sem resposta, deixe o padrão sugerido e marque `a confirmar` no BRIEFING. Se o implementador também estiver entre os revisores, avise que a revisão vale só em contexto limpo (agente `revisor` ou API) e que outra IA é o recomendado.
 - Decisão firme que surgir (ex.: "nunca usar foto de banco") também vai para `DECISOES.md` com data.
 
 ## Depois do questionário
