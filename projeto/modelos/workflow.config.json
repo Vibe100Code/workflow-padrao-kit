@@ -1,0 +1,22 @@
+{
+  "base": "main",
+  "remoto": "origin",
+  "gates": [
+    { "nome": "tipos", "cmd": "npx tsc --noEmit" },
+    { "nome": "testes", "cmd": "npm test" }
+  ],
+  "publicar": null,
+  "worktrees": ".claude/worktrees",
+  "links": [".env", "node_modules"],
+  "papeis": {
+    "_leia": "Quem faz o quê NESTE projeto. Padrão sugerido abaixo; troque à vontade (ex.: Codex coordena e Claude implementa, ou uma ferramenta só). Única regra fixa: quem implementou uma mudança não revisa essa mudança.",
+    "coordenador": { "ferramenta": "Claude Code" },
+    "implementador": { "ferramenta": "Codex", "cmd": "codex exec -s workspace-write -C <pasta> \"$(cat brief.md)\"" },
+    "ajudantes": [
+      { "ferramenta": "subagentes do Claude", "uso": "buscar, varrer, conferir" }
+    ],
+    "revisores": [
+      { "ferramenta": "API Claude", "cmd": "node scripts/revisar-pela-api.mjs --base main -o revisao.md" }
+    ]
+  }
+}

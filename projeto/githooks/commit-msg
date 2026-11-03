@@ -1,0 +1,11 @@
+#!/bin/sh
+# Procedência de ferramenta não entra no histórico.
+#
+# Aqui e não só no gate: o trailer é acrescentado no MOMENTO de escrever a
+# mensagem, muitas vezes por automação, e reprovar depois significa reescrever
+# commit, o que é caro e, com duas sessões no mesmo repositório, arriscado.
+if grep -qiE 'co-authored-by:|claude\.ai/code|generated with \[?claude|🤖' "$1"; then
+  echo "commit recusado: a mensagem carrega procedência de ferramenta." >&2
+  echo "Tire o trailer (Co-Authored-By / link de sessão) e repita." >&2
+  exit 1
+fi

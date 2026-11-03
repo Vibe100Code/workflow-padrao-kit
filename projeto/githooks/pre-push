@@ -1,0 +1,39 @@
+#!/bin/sh
+# Roda os gates antes de deixar publicar, mas bloqueia só o que ESTE trabalho
+# quebrou. Gate que já falhava na base (`origin/main`) vira aviso.
+#
+# O motivo está escrito por extenso em scripts/gates-do-que-mudou.mjs: reprovar
+# todo mundo por culpa alheia é o que transforma `--no-verify` em rotina, e
+# `--no-verify` não escolhe: ele libera o defeito alheio E o seu.
+#
+# `git push --no-verify` continua existindo para o caso legítimo.
+
+# O `node scripts/integrar.mjs` roda esta MESMA régua antes de empurrar. Sem o
+# selo abaixo ela rodava duas vezes por integração, e a segunda não media nada
+# novo, só alargava a janela em que a base pode andar (20 commits/hora medidos).
+#
+# O selo é fail-closed: sem ele, ou apontando para outro commit, a régua roda
+# inteira. `git push` à mão continua passando pela conferência completa.
+# O selo vale para o que está SENDO EMPURRADO (stdin do pre-push), não para o
+# HEAD: os dois podem divergir.
+ENTRADA=$(cat)
+if [ -n "$WF_VALIDADO_EM" ] && [ -n "$ENTRADA" ]; then
+  todos_selados=1
+  while read -r _lref lsha _rref _rsha; do
+    [ -z "$lsha" ] && continue
+    [ "$lsha" = "$WF_VALIDADO_EM" ] || todos_selados=0
+  done <<EOF_ENTRADA
+$ENTRADA
+EOF_ENTRADA
+  if [ $todos_selados = 1 ]; then
+    echo "[gates] o integrar já validou ${WF_VALIDADO_EM%${WF_VALIDADO_EM#???????}}: não vou rodar a mesma régua duas vezes."
+    exit 0
+  fi
+fi
+
+# A régua é carga pesada como qualquer gate: pela fila ela espera a vez e
+# imprime a posição. Se o push vier de dentro do `integrar` e o selo não pular,
+# WF_FILA_DONO herdado faz o na-fila passar direto em vez de esperar por quem o
+# chamou. O código de saída é o da régua.
+RAIZ=$(git rev-parse --show-toplevel)
+exec node "$RAIZ/scripts/na-fila.mjs" --rotulo=pre-push -- node "$RAIZ/scripts/gates-do-que-mudou.mjs"

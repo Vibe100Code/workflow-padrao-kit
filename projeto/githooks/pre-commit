@@ -1,0 +1,99 @@
+#!/usr/bin/env node
+// Confere sessão isolada antes de aceitar o commit (2026-08-10).
+//
+// O QUE ACONTECEU, porque é o que dá peso a este gancho:
+//
+// Uma sessão criou a branch da tarefa e começou a trabalhar. A outra, no MESMO
+// diretório, fez `git checkout` para outra branch. O git não avisa ninguém:
+// `HEAD` é um arquivo só, compartilhado. A primeira sessão seguiu editando e
+// commitou na branch da segunda, e depois publicou a sua branch VAZIA,
+// relatando ao dono um trabalho que não estava lá. Medido no diretório
+// principal: 33 trocas de branch registradas.
+//
+// Nada disso falha sozinho: não há conflito, não há erro, não há aviso.
+// A cura é `git worktree`: um diretório por sessão, cada um com o seu HEAD, e
+// nunca commitar direto na branch base (`main`).
+//
+// Para pular num caso legítimo:
+//   git commit --no-verify
+
+const { execFileSync } = require("node:child_process");
+const fs = require("node:fs");
+const path = require("node:path");
+
+function git(...args) {
+  return execFileSync("git", args, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+}
+
+function gitQuieto(...args) {
+  try { return git(...args); } catch { return ""; }
+}
+
+// Commit inicial de um repositório recém-criado (HEAD ainda não existe):
+// precisa nascer na branch base antes que qualquer worktree possa ser aberta.
+if (!gitQuieto("rev-parse", "--verify", "--quiet", "HEAD")) {
+  process.exit(0);
+}
+
+const meu = git("rev-parse", "--path-format=absolute", "--git-dir");
+const comum = git("rev-parse", "--path-format=absolute", "--git-common-dir");
+const raizPrincipal = path.dirname(comum);
+const toplevel = git("rev-parse", "--path-format=absolute", "--show-toplevel");
+
+let base = "main";
+for (const dir of [toplevel, raizPrincipal]) {
+  const arq = path.join(dir, "workflow.config.json");
+  if (!fs.existsSync(arq)) continue;
+  try {
+    const cfg = JSON.parse(fs.readFileSync(arq, "utf8"));
+    if (typeof cfg.base === "string" && cfg.base.trim()) {
+      base = cfg.base.trim();
+      break;
+    }
+  } catch {}
+}
+
+const branch = gitQuieto("rev-parse", "--abbrev-ref", "HEAD") || gitQuieto("symbolic-ref", "--short", "HEAD") || "HEAD";
+
+if (branch === base || branch === "main" || branch === "master" || branch === "HEAD") {
+  console.error("");
+  console.error(`commit recusado: você está em \`${branch}\`.`);
+  console.error(`Nada é commitado direto na branch base (\`${base}\`) nem em HEAD solto.`);
+  console.error("");
+  console.error("Abra uma sessão própria antes de trabalhar:");
+  console.error("  node scripts/nova-sessao.mjs <tipo>/<tarefa>");
+  console.error("  node scripts/tarefa.mjs abrir <tipo>/<tarefa>");
+  console.error("");
+  console.error("Se este commit é deliberado: git commit --no-verify");
+  console.error("");
+  process.exit(1);
+}
+
+if (process.env.CI) {
+  process.exit(0);
+}
+
+const noPrimario = path.resolve(meu) === path.resolve(comum);
+const checkouts = git("worktree", "list", "--porcelain")
+  .split("\n")
+  .filter((l) => l.startsWith("worktree "))
+  .map((l) => l.slice("worktree ".length));
+
+if (!noPrimario || checkouts.length < 2) {
+  process.exit(0);
+}
+
+console.error("");
+console.error("Há mais de uma sessão neste repositório e você está commitando");
+console.error("do checkout PRINCIPAL. Isso é o que faz o branch trocar embaixo");
+console.error("de uma sessão sem avisar, e o commit ir parar no branch da outra.");
+console.error("");
+console.error(`  checkouts abertos: ${checkouts.length}`);
+for (const c of checkouts) console.error(`    · ${c}`);
+console.error("");
+console.error("Abra um diretório só seu e trabalhe lá:");
+console.error("  node scripts/nova-sessao.mjs <tipo>/<sua-tarefa>");
+console.error("");
+console.error("Se este commit é deliberado: git commit --no-verify");
+console.error("");
+process.exit(1);

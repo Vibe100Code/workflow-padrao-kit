@@ -1,0 +1,7 @@
+#!/bin/sh
+# Com core.hooksPath=githooks o git deixa de olhar .git/hooks, e o hook que o
+# `graphify hook install` grava lá nunca roda (revisão 2026-11-02). Este repasse
+# chama o hook original, se existir. Falha nunca bloqueia (fail open).
+ORIG="$(git rev-parse --git-common-dir 2>/dev/null)/hooks/$(basename "$0")"
+[ -x "$ORIG" ] && "$ORIG" "$@" || true
+exit 0

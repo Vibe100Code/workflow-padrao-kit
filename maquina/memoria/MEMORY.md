@@ -1,0 +1,1 @@
+- [Estrutura de trabalho (regra de toda sessão)](estrutura-de-trabalho.md) — coordenador orquestra, papéis em workflow.config.json (padrão Codex implementa), revisão por quem não implementou, relato termina com AGENTES:
